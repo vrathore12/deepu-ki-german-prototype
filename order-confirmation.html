@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Confirmed — Deepu Ki German</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="logo"><span class="logo-mark">DG</span>Deepu Ki German</a>
+    <nav class="nav-links"><a href="index.html">Home</a><a href="shop.html">Booklets</a></nav>
+    <div class="header-actions">
+      <a href="cart.html" class="cart-link">🛒 <span data-cart-count class="cart-count">0</span></a>
+      <button class="nav-toggle" onclick="toggleMobileNav()">☰</button>
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="container">
+
+    <div class="checkout-steps">
+      <div class="step done">1. Cart</div>
+      <div class="step done">2. Details & Payment</div>
+      <div class="step active">3. Confirmation</div>
+    </div>
+
+    <div id="confirm-body"></div>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">© 2026 Deepu Ki German. All rights reserved. — Prototype design, not a live store.</div>
+  </div>
+</footer>
+
+<script src="js/products.js"></script>
+<script src="js/main.js"></script>
+<script>
+  const orderRaw = localStorage.getItem("dkg_last_order");
+  const body = document.getElementById("confirm-body");
+
+  if(!orderRaw){
+    body.innerHTML = `
+      <div class="empty-state">
+        <div class="emoji">📄</div>
+        <h3>No recent order found</h3>
+        <p>Complete a checkout to see your confirmation here.</p>
+        <a href="shop.html" class="btn btn-primary">Browse Booklets</a>
+      </div>`;
+  } else {
+    const order = JSON.parse(orderRaw);
+    const itemsHtml = order.items.map(i => {
+      const p = getProduct(i.id);
+      if(!p) return "";
+      return `
+        <div class="download-item">
+          <div>
+            <div class="cart-item-title">${p.title} ${i.qty > 1 ? "× " + i.qty : ""}</div>
+            <div class="cart-item-lang">${p.language} · ${p.pages} pages</div>
+          </div>
+          <button class="btn btn-accent btn-sm" onclick="showToast('Downloading ${p.title}.pdf (demo)')">⬇ Download</button>
+        </div>`;
+    }).join("");
+
+    body.innerHTML = `
+      <div class="confirm-wrap">
+        <div class="confirm-check">✓</div>
+        <h1>Payment Successful!</h1>
+        <p>Thank you, ${order.name.split(' ')[0] || 'there'} — your booklets are ready to download. A confirmation email with your download links has also been sent to ${order.email}.</p>
+
+        <div class="order-card">
+          <div class="order-row"><span>Order ID</span><b>${order.id}</b></div>
+          <div class="order-row"><span>Payment Status</span><span class="badge badge-green">Paid</span></div>
+          <div class="order-row"><span>Order Date</span><span>${new Date(order.date).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' })}</span></div>
+          <div class="order-row"><span>Total Paid</span><b>${money(order.total)}</b></div>
+          <div class="order-row" style="border-bottom:none;"><span>Email</span><span>${order.email}</span></div>
+        </div>
+
+        <h3 style="text-align:left;">Your Downloads</h3>
+        <div class="order-card" style="text-align:left;">${itemsHtml}</div>
+
+        <div style="display:flex; gap:12px; justify-content:center; margin-top:24px; flex-wrap:wrap;">
+          <a href="shop.html" class="btn btn-outline">Continue Shopping</a>
+          <button class="btn btn-primary" onclick="showToast('Invoice sent to email (demo)')">Download Invoice</button>
+        </div>
+      </div>`;
+  }
+</script>
+</body>
+</html>

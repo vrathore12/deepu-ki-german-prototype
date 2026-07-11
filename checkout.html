@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout — Deepu Ki German</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="logo"><span class="logo-mark">DG</span>Deepu Ki German</a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="shop.html">Booklets</a>
+    </nav>
+    <div class="header-actions">
+      <a href="cart.html" class="cart-link">🛒 <span data-cart-count class="cart-count">0</span></a>
+      <button class="nav-toggle" onclick="toggleMobileNav()">☰</button>
+    </div>
+  </div>
+</header>
+
+<div class="container breadcrumb"><a href="index.html">Home</a> / <a href="cart.html">Cart</a> / Checkout</div>
+
+<section class="section" style="padding-top:8px;">
+  <div class="container">
+
+    <div class="checkout-steps">
+      <div class="step done">1. Cart</div>
+      <div class="step active">2. Details & Payment</div>
+      <div class="step">3. Confirmation</div>
+    </div>
+
+    <div id="checkout-body"></div>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">© 2026 Deepu Ki German. All rights reserved. — Prototype design, not a live store.</div>
+  </div>
+</footer>
+
+<script src="js/products.js"></script>
+<script src="js/main.js"></script>
+<script>
+  const cart = getCart();
+  const body = document.getElementById("checkout-body");
+
+  if(cart.length === 0){
+    body.innerHTML = `
+      <div class="empty-state">
+        <div class="emoji">🛒</div>
+        <h3>Your cart is empty</h3>
+        <p>Add a booklet before checking out.</p>
+        <a href="shop.html" class="btn btn-primary">Browse Booklets</a>
+      </div>`;
+  } else {
+    const total = cartTotal();
+    let itemsHtml = cart.map(item => {
+      const p = getProduct(item.id);
+      return p ? `<div class="order-row"><span>${p.title} × ${item.qty}</span><span>${money(p.price * item.qty)}</span></div>` : "";
+    }).join("");
+
+    body.innerHTML = `
+      <div class="checkout-layout">
+        <div class="form-card">
+          <h3 style="margin-bottom:18px;">Your Details</h3>
+          <form id="checkout-form">
+            <div class="form-field"><label>Full Name *</label><input type="text" id="f-name" required placeholder="Enter your full name"></div>
+            <div class="form-row-2">
+              <div class="form-field"><label>Mobile Number *</label><input type="tel" id="f-mobile" required pattern="[0-9]{10}" placeholder="10-digit mobile number"></div>
+              <div class="form-field"><label>Email Address *</label><input type="email" id="f-email" required placeholder="you@example.com"></div>
+            </div>
+            <div class="form-field">
+              <label>State (Optional)</label>
+              <select id="f-state">
+                <option value="">Select state</option>
+                <option>Uttar Pradesh</option><option>Maharashtra</option><option>Delhi</option>
+                <option>Karnataka</option><option>Tamil Nadu</option><option>West Bengal</option>
+                <option>Rajasthan</option><option>Gujarat</option><option>Other</option>
+              </select>
+            </div>
+
+            <h3 style="margin:26px 0 12px;">Payment Method</h3>
+            <div class="pay-methods">
+              <div class="pay-method selected" data-pay="upi">UPI</div>
+              <div class="pay-method" data-pay="card">Card</div>
+              <div class="pay-method" data-pay="netbanking">Net Banking</div>
+              <div class="pay-method" data-pay="wallet">Wallet</div>
+            </div>
+            <div style="font-size:.8rem; color:var(--muted); margin-bottom:20px;">Powered by Razorpay — demo checkout, no real payment is processed in this prototype.</div>
+
+            <button type="submit" class="btn btn-accent btn-block">Pay ${money(total)} Securely</button>
+            <div class="secure-note">🔒 256-bit encrypted · Your payment details are never stored on our servers</div>
+          </form>
+        </div>
+
+        <div class="summary-card">
+          <h3>Order Summary</h3>
+          ${itemsHtml}
+          <div class="summary-row total"><span>Total</span><span>${money(total)}</span></div>
+          <a href="cart.html" class="btn btn-outline btn-block" style="margin-top:14px;">← Edit Cart</a>
+        </div>
+      </div>`;
+
+    document.querySelectorAll(".pay-method").forEach(el => {
+      el.addEventListener("click", () => {
+        document.querySelectorAll(".pay-method").forEach(x => x.classList.remove("selected"));
+        el.classList.add("selected");
+      });
+    });
+
+    document.getElementById("checkout-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("f-name").value;
+      const email = document.getElementById("f-email").value;
+      const mobile = document.getElementById("f-mobile").value;
+      const order = {
+        id: "DKG" + Math.floor(100000 + Math.random()*900000),
+        name, email, mobile,
+        items: cart.map(i => ({ id: i.id, qty: i.qty })),
+        total,
+        date: new Date().toISOString()
+      };
+      localStorage.setItem("dkg_last_order", JSON.stringify(order));
+      clearCart();
+      window.location.href = "order-confirmation.html";
+    });
+  }
+</script>
+</body>
+</html>

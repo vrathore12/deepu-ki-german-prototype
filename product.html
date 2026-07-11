@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title">Booklet — Deepu Ki German</title>
+<meta name="description" id="page-desc" content="German learning PDF booklet — instant download.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="logo"><span class="logo-mark">DG</span>Deepu Ki German</a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="shop.html">Booklets</a>
+      <a href="index.html#why">Why Us</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <a href="cart.html" class="cart-link">🛒 <span data-cart-count class="cart-count">0</span></a>
+      <button class="nav-toggle" onclick="toggleMobileNav()">☰</button>
+    </div>
+  </div>
+</header>
+
+<div class="container breadcrumb"><a href="index.html">Home</a> / <a href="shop.html">Booklets</a> / <span id="crumb-title"></span></div>
+
+<section class="section" style="padding-top:8px;">
+  <div class="container">
+    <div class="pd-grid">
+      <div>
+        <div class="pd-gallery-main"><img id="main-image" alt=""></div>
+        <div class="pd-thumbs" id="thumbs"></div>
+      </div>
+      <div>
+        <span class="badge badge-gold" id="pd-level"></span>
+        <h1 class="pd-title" id="pd-title"></h1>
+        <div class="pd-meta-row">
+          <span class="badge badge-green" id="pd-lang"></span>
+          <span class="badge" style="background:var(--surface-alt); color:var(--ink-soft);" id="pd-pages"></span>
+        </div>
+        <p id="pd-short"></p>
+        <div class="pd-price-row">
+          <span class="pd-price" id="pd-price"></span>
+          <span class="price-strike" id="pd-mrp"></span>
+          <span class="badge badge-red" id="pd-off"></span>
+        </div>
+        <div class="pd-actions">
+          <button class="btn btn-outline btn-block" id="add-cart-btn">Add to Cart</button>
+          <button class="btn btn-primary btn-block" id="buy-now-btn">Buy Now</button>
+        </div>
+        <div class="pd-specs">
+          <div class="pd-spec"><span>Format</span><b>PDF (digital)</b></div>
+          <div class="pd-spec"><span>Pages</span><b id="spec-pages"></b></div>
+          <div class="pd-spec"><span>Level</span><b id="spec-level"></b></div>
+          <div class="pd-spec"><span>Language</span><b id="spec-lang"></b></div>
+          <div class="pd-spec"><span>Delivery</span><b>Instant Download</b></div>
+          <div class="pd-spec"><span>File Size</span><b>~4 MB</b></div>
+        </div>
+        <div class="pd-trust">
+          <span>🔒 Secure Payment</span>
+          <span>⚡ Instant Access</span>
+          <span>📧 Emailed Copy</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="desc">Description</button>
+      <button class="tab-btn" data-tab="learn">What You'll Learn</button>
+      <button class="tab-btn" data-tab="toc">Table of Contents</button>
+      <button class="tab-btn" data-tab="reviews">Reviews</button>
+    </div>
+    <div class="tab-panel active" id="tab-desc">
+      <p id="pd-description" style="max-width:760px;"></p>
+      <h3 style="margin-top:24px;">Who Should Buy This</h3>
+      <p id="pd-who" style="max-width:760px;"></p>
+    </div>
+    <div class="tab-panel" id="tab-learn">
+      <ul class="learn-list" id="learn-list" style="max-width:600px;"></ul>
+    </div>
+    <div class="tab-panel" id="tab-toc">
+      <ul class="toc-list" id="toc-list" style="max-width:600px;"></ul>
+    </div>
+    <div class="tab-panel" id="tab-reviews">
+      <p style="color:var(--muted);">No reviews yet — be the first to review this booklet after purchase. ⭐</p>
+    </div>
+
+    <div class="section-head" style="margin-top:60px;">
+      <div class="section-eyebrow">You Might Also Like</div>
+      <h2>Related Booklets</h2>
+    </div>
+    <div class="product-grid" id="related-grid"></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>Deepu Ki German</h4><p>Affordable, teacher-made German learning booklets.</p></div>
+      <div class="footer-col"><h4>Shop</h4><ul><li><a href="shop.html">All Booklets</a></li><li><a href="cart.html">My Cart</a></li></ul></div>
+      <div class="footer-col"><h4>Legal</h4><ul><li><a href="privacy-policy.html">Privacy Policy</a></li><li><a href="terms.html">Terms & Conditions</a></li><li><a href="refund-policy.html">Refund Policy</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul><li>support@deepukigerman.com</li><li>@deepu_ki_german</li></ul></div>
+    </div>
+    <div class="footer-bottom">© 2026 Deepu Ki German. All rights reserved. — Prototype design, not a live store.</div>
+  </div>
+</footer>
+
+<script src="js/products.js"></script>
+<script src="js/main.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id") || PRODUCTS[0].id;
+  const p = getProduct(id) || PRODUCTS[0];
+
+  document.getElementById("page-title").textContent = p.title + " — Deepu Ki German";
+  document.getElementById("page-desc").setAttribute("content", p.short);
+  document.getElementById("crumb-title").textContent = p.title;
+
+  const images = [
+    coverImg(p.title.split(' ')[0]+' '+p.title.split(' ')[1], p.level, p.colors[0], p.colors[1]),
+    coverImg("Sample", "Page 1", p.colors[1], p.colors[0]),
+    coverImg("Sample", "Page 2", p.colors[0], p.colors[1]),
+    coverImg("Sample", "Page 3", p.colors[1], p.colors[0])
+  ];
+  document.getElementById("main-image").src = images[0];
+  document.getElementById("main-image").alt = p.title + " cover";
+  const thumbsEl = document.getElementById("thumbs");
+  images.forEach((src, i) => {
+    const img = document.createElement("img");
+    img.src = src;
+    img.className = i === 0 ? "active" : "";
+    img.onclick = () => {
+      document.getElementById("main-image").src = src;
+      thumbsEl.querySelectorAll("img").forEach(t => t.classList.remove("active"));
+      img.classList.add("active");
+    };
+    thumbsEl.appendChild(img);
+  });
+
+  document.getElementById("pd-level").textContent = p.level;
+  document.getElementById("pd-title").textContent = p.title;
+  document.getElementById("pd-lang").textContent = p.language;
+  document.getElementById("pd-pages").textContent = p.pages + " pages";
+  document.getElementById("pd-short").textContent = p.short;
+  document.getElementById("pd-price").textContent = money(p.price);
+  document.getElementById("pd-mrp").textContent = money(p.mrp);
+  document.getElementById("pd-off").textContent = Math.round((1 - p.price/p.mrp)*100) + "% OFF";
+  document.getElementById("spec-pages").textContent = p.pages + " pages";
+  document.getElementById("spec-level").textContent = p.level;
+  document.getElementById("spec-lang").textContent = p.language;
+  document.getElementById("pd-description").textContent = p.description;
+  document.getElementById("pd-who").textContent = p.who;
+
+  document.getElementById("learn-list").innerHTML = p.learn.map(l => `<li>${l}</li>`).join("");
+  document.getElementById("toc-list").innerHTML = p.toc.map(t => `<li><b>${t[0]}</b><span>${t[1]}</span></li>`).join("");
+
+  document.getElementById("add-cart-btn").onclick = () => addToCart(p.id);
+  document.getElementById("buy-now-btn").onclick = () => { addToCart(p.id); window.location.href = "cart.html"; };
+
+  // Tabs
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab-panel").forEach(pnl => pnl.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
+    });
+  });
+
+  // Related
+  const relatedGrid = document.getElementById("related-grid");
+  getRelated(p.id, 3).forEach(rp => {
+    relatedGrid.innerHTML += `
+      <div class="product-card">
+        <a href="product.html?id=${rp.id}" class="product-cover">
+          <img src="${coverImg(rp.title.split(' ')[0]+' '+rp.title.split(' ')[1], rp.level, rp.colors[0], rp.colors[1])}" alt="${rp.title} cover">
+          <span class="badge badge-gold product-level">${rp.level}</span>
+        </a>
+        <div class="product-body">
+          <a href="product.html?id=${rp.id}" class="product-title">${rp.title}</a>
+          <p class="product-desc">${rp.short}</p>
+          <div class="product-meta"><span>${rp.pages} pages</span><span>${rp.language}</span></div>
+          <div class="product-price-row"><span class="price">${money(rp.price)}</span><span class="price-strike">${money(rp.mrp)}</span></div>
+          <div class="product-actions">
+            <button class="btn btn-ghost" onclick="addToCart('${rp.id}')">Add to Cart</button>
+            <a href="product.html?id=${rp.id}" class="btn btn-primary">View</a>
+          </div>
+        </div>
+      </div>`;
+  });
+</script>
+</body>
+</html>
